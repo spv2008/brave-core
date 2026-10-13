@@ -14,6 +14,7 @@ substitutions:
       CommandBringAllTabsToThisWindow
         - Moves all tabs from other windows to the current window
       CommandCloseDuplicateTabs - Closes duplicate tabs with the same URL
+      CommandCloseTabsToLeft - Closes all tabs to the left of the selection
       CommandOpenInContainer - Container submenu
       CommandRenameTab - Allows renaming a tab with custom title
     add_enum_entries:
@@ -25,5 +26,6 @@ substitutions:
         - CommandToggleTabMuted
         - CommandBringAllTabsToThisWindow
         - CommandCloseDuplicateTabs
+        - CommandCloseTabsToLeft
         - CommandOpenInContainer
         - CommandRenameTab

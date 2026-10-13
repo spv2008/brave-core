@@ -176,6 +176,11 @@ void BraveBrowserTabStripController::ExecuteContextMenuCommand(
     return;
   }
 
+  if (command_id == TabStripModel::CommandCloseTabsToLeft) {
+    brave::CloseTabsToLeft(GetBrowserWindowInterface());
+    return;
+  }
+
   BrowserTabStripController::ExecuteContextMenuCommand(tab, command_id,
                                                        event_flags);
 }
@@ -223,6 +228,10 @@ bool BraveBrowserTabStripController::IsContextMenuCommandEnabled(
 
   if (command_id == TabStripModel::CommandCloseDuplicateTabs) {
     return brave::HasDuplicatesOfActiveTab(GetBrowserWindowInterface());
+  }
+
+  if (command_id == TabStripModel::CommandCloseTabsToLeft) {
+    return brave::CanCloseTabsToLeft(GetBrowserWindowInterface());
   }
 
   if (command_id == TabStripModel::CommandShowVerticalTabs) {

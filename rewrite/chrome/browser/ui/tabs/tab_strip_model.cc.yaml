@@ -20,6 +20,7 @@ substitutions:
             case CommandToggleTabMuted:
             case CommandBringAllTabsToThisWindow:
             case CommandCloseDuplicateTabs:
+            case CommandCloseTabsToLeft:
             case CommandOpenInContainer:
             case CommandRenameTab:
               NOTREACHED();\n
@@ -40,6 +41,7 @@ substitutions:
             case CommandToggleTabMuted:
             case CommandBringAllTabsToThisWindow:
             case CommandCloseDuplicateTabs:
+            case CommandCloseTabsToLeft:
             case CommandOpenInContainer:
             case CommandRenameTab:
               NOTREACHED();\n
