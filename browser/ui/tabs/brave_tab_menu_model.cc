@@ -91,6 +91,9 @@ std::u16string BraveTabMenuModel::GetLabelAt(size_t index) const {
   } else if (command_id == TabStripModel::CommandCloseTabsToRight) {
     return l10n_util::GetStringUTF16(
         IDS_TAB_CXMENU_CLOSETABSTORIGHT_VERTICAL_TABS);
+  } else if (command_id == TabStripModel::CommandCloseTabsToLeft) {
+    return l10n_util::GetStringUTF16(
+        IDS_TAB_CXMENU_CLOSETABSTOLEFT_VERTICAL_TABS);
   }
 
   return TabMenuModel::GetLabelAt(index);
@@ -149,6 +152,13 @@ void BraveTabMenuModel::Build(BrowserWindowInterface* browser_window,
   InsertItemWithStringIdAt(close_other_tabs_index.value_or(GetItemCount()),
                            TabStripModel::CommandCloseDuplicateTabs,
                            IDS_TAB_CXMENU_CLOSE_DUPLICATE_TABS);
+
+  if (auto close_tabs_to_right_index =
+          GetIndexOfCommandId(TabStripModel::CommandCloseTabsToRight)) {
+    InsertItemWithStringIdAt(*close_tabs_to_right_index,
+                             TabStripModel::CommandCloseTabsToLeft,
+                             IDS_TAB_CXMENU_CLOSETABSTOLEFT);
+  }
 
 #if BUILDFLAG(ENABLE_CONTAINERS)
   if (base::FeatureList::IsEnabled(containers::features::kContainers)) {

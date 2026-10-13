@@ -128,6 +128,48 @@ IN_PROC_BROWSER_TEST_F(BraveTabMenuBrowserTest, Basics) {
   EXPECT_FALSE(menu->IsCommandIdEnabled(TabStripModel::CommandBookmarkAllTabs));
 }
 
+IN_PROC_BROWSER_TEST_F(BraveTabMenuBrowserTest, CloseTabsToLeft) {
+  auto* tab_strip_model = browser()->tab_strip_model();
+
+  {
+    auto menu = CreateMenuControllerAt(0);
+    auto* menu_model = CreateMenuModelAt(menu.get(), 0);
+    ASSERT_TRUE(
+        menu_model->GetIndexOfCommandId(TabStripModel::CommandCloseTabsToLeft)
+            .has_value());
+    EXPECT_FALSE(menu->IsCommandIdEnabled(TabStripModel::CommandCloseTabsToLeft));
+  }
+
+  chrome::AddTabAt(browser(), GURL("https://example.com"), /*index=*/1,
+                   /*foreground=*/true);
+  chrome::AddTabAt(browser(), GURL("https://foo.com"), /*index=*/2,
+                   /*foreground=*/true);
+  ASSERT_EQ(3, tab_strip_model->count());
+  ASSERT_EQ(2, tab_strip_model->active_index());
+
+  {
+    auto menu = CreateMenuControllerAt(2);
+    auto* menu_model = CreateMenuModelAt(menu.get(), 2);
+    ASSERT_TRUE(
+        menu_model->GetIndexOfCommandId(TabStripModel::CommandCloseTabsToLeft)
+            .has_value());
+    // Item should sit immediately before Close tabs to the right.
+    EXPECT_EQ(
+        *menu_model->GetIndexOfCommandId(TabStripModel::CommandCloseTabsToLeft) +
+            1,
+        *menu_model->GetIndexOfCommandId(
+            TabStripModel::CommandCloseTabsToRight));
+    EXPECT_TRUE(menu->IsCommandIdEnabled(TabStripModel::CommandCloseTabsToLeft));
+
+    menu->ExecuteCommand(TabStripModel::CommandCloseTabsToLeft,
+                         /*event_flags=*/0);
+  }
+
+  EXPECT_EQ(1, tab_strip_model->count());
+  EXPECT_EQ(GURL("https://foo.com"),
+            tab_strip_model->GetWebContentsAt(0)->GetVisibleURL());
+}
+
 IN_PROC_BROWSER_TEST_F(BraveTabMenuBrowserTest,
                        BringAllTabsToThisWindow_VisibleWhenOtherBrowserExists) {
   auto is_command_visible = [&]() {
